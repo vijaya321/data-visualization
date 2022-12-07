@@ -1,11 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { select, geoPath, min, max, scaleLinear, geoAlbersUsa } from "d3";
 import useResizeObserver from "./useResizeObserver";
-import { Container, Header } from 'semantic-ui-react'
-
-/**
- * Component that renders a map of Germany.
- */
 
 function GeoChart({ data, property }) {
   const svgRef = useRef();

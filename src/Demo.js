@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 import BarChart from './BarChart';
 import data from './data';
-import { csv } from 'd3';
 
 const randomColor = () => {
   return `rgb(${255 * Math.random()}, ${255 * Math.random()}, ${255})`;
