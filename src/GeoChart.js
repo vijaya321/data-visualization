@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
-import { select, geoPath, min, max, scaleLinear, geoAlbersUsa, geoMercator } from "d3";
+import { select, geoPath, min, max, scaleLinear, geoAlbersUsa } from "d3";
 import useResizeObserver from "./useResizeObserver";
+import { Container, Header } from 'semantic-ui-react'
 
 /**
  * Component that renders a map of Germany.
@@ -16,10 +17,8 @@ function GeoChart({ data, property }) {
   useEffect(() => {
     const svg = select(svgRef.current);
 
-    const minProp = min(data.features, feature => feature.properties[property]);
-    const maxProp = max(data.features, feature => feature.properties[property]);
-    console.warn(minProp)
-    console.warn(maxProp)
+    const minProp = min(data.features, feature => feature.properties['STATEFP']);
+    const maxProp = max(data.features, feature => feature.properties['STATEFP']);
     const colorScale = scaleLinear()
       .domain([minProp, maxProp])
       .range(["#ccc", "red"]); 
@@ -30,8 +29,8 @@ function GeoChart({ data, property }) {
       dimensions || wrapperRef.current.getBoundingClientRect();
 
     // projects geo-coordinates on a 2D plane
-    // const projection = geoAlbersUsa()
-    const projection = geoMercator()
+    const projection = geoAlbersUsa()
+    // const projection = geoMercator()
       .fitSize([width, height], selectedCountry || data)
       .precision(100);
 
@@ -49,7 +48,7 @@ function GeoChart({ data, property }) {
       })
       .attr("class", "country")
       .transition()
-      .attr("fill", feature => colorScale(feature.properties[property]))
+      .attr("fill", feature => colorScale(feature.properties['STATEFP']))
       .attr("d", feature => pathGenerator(feature));
 
     // render text
@@ -61,16 +60,16 @@ function GeoChart({ data, property }) {
       .text(
         feature =>
           feature &&
-          feature.properties.name +
+          feature.properties.NAME +
             ": " +
-            feature.properties[property].toLocaleString()
+            feature.properties['STATEFP'].toLocaleString() + "%"
       )
       .attr("x", 10)
       .attr("y", 25);
-  }, [data, dimensions, property, selectedCountry]);
+  }, [data, dimensions, 'STATEFP', selectedCountry]);
 
   return (
-    <div ref={wrapperRef} style={{ marginBottom: "2rem" }}>
+    <div ref={wrapperRef}>
       <svg ref={svgRef}></svg>
     </div>
   );
